@@ -1,6 +1,7 @@
 package com.microservices.blogapp.exception;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -51,5 +52,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 errList
         );
         return ResponseEntity.ok().header("Request_Type","Bad_RES_ID").body(errorObject);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public static ResponseEntity<ErrorObject> handleGlobalException(Exception ex,
+                                                                              WebRequest req){
+        ErrorDetails errorDetails=new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                req.getDescription(false),
+                "SERVER_ERROR"
+        );
+        List<ErrorDetails> errList=new ArrayList<>();
+        errList.add(errorDetails);
+        ErrorObject errorObject=new ErrorObject(
+                false,
+                errList
+        );
+        return new ResponseEntity<>(errorObject, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

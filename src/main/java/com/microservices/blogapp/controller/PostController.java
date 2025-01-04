@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class PostController {
     }
 
     @GetMapping("/getPostById/{id}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable("id") Long id){
+    public ResponseEntity<PostDto> getPostById(@Valid @PathVariable("id") Long id){
            Post fetchedPost = postService.findById(id);
         return new ResponseEntity<>(postEntityToDTO.postEntityToDTO(fetchedPost),HttpStatus.OK);
     }
