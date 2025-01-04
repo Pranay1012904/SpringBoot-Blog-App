@@ -1,5 +1,6 @@
 package com.microservices.blogapp.controller;
 
+import com.microservices.blogapp.dto.PageablePostResponse;
 import com.microservices.blogapp.dto.PostDto;
 import com.microservices.blogapp.entity.Post;
 import com.microservices.blogapp.mapstruct.PostDTOToEntity;
@@ -31,14 +32,17 @@ public class PostController {
     }
 
     @GetMapping("/getAllPosts")
-    public ResponseEntity<List<PostDto>> getAllPost(){
-       List<Post> postList= postService.getAllPost();
-       List<PostDto> postDtos=new ArrayList<>();
-       if(postList.isEmpty()){
-           return new ResponseEntity<>(postDtos,HttpStatus.NO_CONTENT);
+    public ResponseEntity<PageablePostResponse> getAllPost(
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo
+    ){
+       PageablePostResponse pageablePostResponse= postService.getAllPost(pageSize, pageNo);
+
+       if(pageablePostResponse.getPostDtoList().isEmpty()){
+           return new ResponseEntity<>(pageablePostResponse,HttpStatus.NO_CONTENT);
        }
-      postDtos= postList.stream().map(post -> postEntityToDTO.postEntityToDTO(post)).toList();
-        return new ResponseEntity<>(postDtos,HttpStatus.OK);
+
+        return new ResponseEntity<>(pageablePostResponse,HttpStatus.OK);
     }
 
     @GetMapping("/getPostById/{id}")
