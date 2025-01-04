@@ -40,4 +40,17 @@ public class PostController {
       postDtos= postList.stream().map(post -> postEntityToDTO.postEntityToDTO(post)).toList();
         return new ResponseEntity<>(postDtos,HttpStatus.OK);
     }
+
+    @GetMapping("/getPostById/{id}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable("id") Long id){
+           Post fetchedPost = postService.findById(id);
+        return new ResponseEntity<>(postEntityToDTO.postEntityToDTO(fetchedPost),HttpStatus.OK);
+    }
+
+    @PutMapping("/updatePost/{id}")
+    public ResponseEntity<PostDto> updatePostById(@RequestBody PostDto postDto,
+                                                  @PathVariable("id") Long id){
+          Post updatedPost = postService.updatePostById(postDTOToEntity.postDTOToEntity(postDto),id);
+        return new ResponseEntity<>(postEntityToDTO.postEntityToDTO(updatedPost),HttpStatus.OK);
+    }
 }
