@@ -1,5 +1,6 @@
 package com.microservices.blogapp.controller;
 
+import com.microservices.blogapp.constants.CustomConstants;
 import com.microservices.blogapp.dto.PageablePostResponse;
 import com.microservices.blogapp.dto.PostDto;
 import com.microservices.blogapp.entity.Post;
@@ -33,8 +34,8 @@ public class PostController {
 
     @GetMapping("/getAllPosts")
     public ResponseEntity<PageablePostResponse> getAllPost(
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo
+            @RequestParam(value = CustomConstants.PAGE_SIZE, defaultValue = CustomConstants.PAGE_SIZE_DEF_VAL, required = false) int pageSize,
+            @RequestParam(value = CustomConstants.PAGE_NO, defaultValue = CustomConstants.PAGE_NO_DEF_VAL, required = false) int pageNo
     ){
        PageablePostResponse pageablePostResponse= postService.getAllPost(pageSize, pageNo);
 
