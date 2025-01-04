@@ -5,13 +5,12 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -34,5 +33,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         objectBody.put("Errors", exceptionalErrors);
 
         return new ResponseEntity<>(objectBody, status);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public static ResponseEntity<ErrorObject> handleResourceNotFoundException(ResourceNotFoundException ex,
+                                                                              WebRequest req){
+        ErrorDetails errorDetails=new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                req.getDescription(false),
+                "RESOURCE_NOT_FOUND"
+        );
+        List<ErrorDetails> errList=new ArrayList<>();
+        errList.add(errorDetails);
+        ErrorObject errorObject=new ErrorObject(
+                false,
+                errList
+        );
+        return ResponseEntity.ok().header("Request_Type","Bad_RES_ID").body(errorObject);
     }
 }
