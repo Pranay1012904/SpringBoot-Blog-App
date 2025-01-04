@@ -9,10 +9,10 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -28,5 +28,16 @@ public class PostController {
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto){
         Post savedPost = postService.createPost(postDTOToEntity.postDTOToEntity(postDto));
     return new ResponseEntity<>(postEntityToDTO.postEntityToDTO(savedPost), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllPosts")
+    public ResponseEntity<List<PostDto>> getAllPost(){
+       List<Post> postList= postService.getAllPost();
+       List<PostDto> postDtos=new ArrayList<>();
+       if(postList.isEmpty()){
+           return new ResponseEntity<>(postDtos,HttpStatus.NO_CONTENT);
+       }
+      postDtos= postList.stream().map(post -> postEntityToDTO.postEntityToDTO(post)).toList();
+        return new ResponseEntity<>(postDtos,HttpStatus.OK);
     }
 }
