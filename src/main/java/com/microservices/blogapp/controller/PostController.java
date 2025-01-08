@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class PostController {
     private PostDTOToEntity postDTOToEntity;
     private PostEntityToDTO postEntityToDTO;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto){
         Post savedPost = postService.createPost(postDTOToEntity.postDTOToEntity(postDto));
@@ -53,6 +55,7 @@ public class PostController {
         return new ResponseEntity<>(postEntityToDTO.postEntityToDTO(fetchedPost),HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updatePost/{id}")
     public ResponseEntity<PostDto> updatePostById(@RequestBody PostDto postDto,
                                                   @PathVariable("id") Long id){
