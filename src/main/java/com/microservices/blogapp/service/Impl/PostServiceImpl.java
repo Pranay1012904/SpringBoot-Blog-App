@@ -69,7 +69,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(
                     "POST",
                     "ID",
-                        id
+                    String.valueOf(id)
         ));
     }
 
@@ -78,7 +78,7 @@ public class PostServiceImpl implements PostService {
           Post fetchedPost  =postRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(
                     "POST",
                     "ID",
-                    id
+                  String.valueOf(id)
             ));
           fetchedPost.setTitle(post.getTitle());
           fetchedPost.setContent(post.getContent());
