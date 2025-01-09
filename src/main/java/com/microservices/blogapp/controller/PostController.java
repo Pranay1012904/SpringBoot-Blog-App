@@ -57,7 +57,7 @@ public class PostController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updatePost/{id}")
-    public ResponseEntity<PostDto> updatePostById(@RequestBody PostDto postDto,
+    public ResponseEntity<PostDto> updatePostById(@Valid @RequestBody PostDto postDto,
                                                   @PathVariable("id") Long id){
           Post updatedPost = postService.updatePostById(postDTOToEntity.postDTOToEntity(postDto),id);
         return new ResponseEntity<>(postEntityToDTO.postEntityToDTO(updatedPost),HttpStatus.OK);

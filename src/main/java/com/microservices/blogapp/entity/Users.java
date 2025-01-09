@@ -29,7 +29,7 @@ public class Users {
     private String name;
 
     @NotEmpty
-    @Size(min = 6, max = 15)
+    @Size(min = 6)
     @Column(unique = true)
     private String password;
 
