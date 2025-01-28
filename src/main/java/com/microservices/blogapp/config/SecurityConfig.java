@@ -36,7 +36,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(authorize-> authorize.requestMatchers(HttpMethod.GET,"/post/api/**")
-                        .permitAll().anyRequest().authenticated())//here we are giving GET request permits to all users
+                        .permitAll().requestMatchers("auth/api/**").permitAll().anyRequest().authenticated())//here we are giving GET request permits to all users
                        .httpBasic(Customizer.withDefaults());
      return http.build();
     }
